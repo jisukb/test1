@@ -86,6 +86,11 @@
     where hno=#{no}
   </update>
   
+  <delete id="delete" parameterType="int">
+    delete from pet_hp 
+    where hno=#{value}
+  </delete>
+  
      <!-- 
   <select id="findByKeyword" resultMap="hospitalMap" parameterType="string">
     select
@@ -104,10 +109,5 @@
     </if>
     order by hno desc
   </select>
-  
-  <delete id="delete" parameterType="int">
-    delete from pet_hp 
-    where hno=#{value}
-  </delete>
     -->
 </mapper>
