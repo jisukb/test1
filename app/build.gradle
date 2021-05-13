@@ -1,0 +1,33 @@
+plugins {
+    id 'eclipse-wtp'
+    id 'war'
+    id 'java'
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+eclipse {
+    project {
+        name = 'test1'
+    }
+}
+
+repositories {
+    jcenter()
+}
+
+war {
+    archiveBaseName = 'web'
+}
+
+dependencies {
+
+    providedCompile 'javax.servlet:javax.servlet-api:4.0.1'
+
+    implementation 'org.mybatis:mybatis:3.5.6'
+    implementation 'org.mariadb.jdbc:mariadb-java-client:2.7.2'
+    testImplementation 'junit:junit:4.13'
+    implementation 'com.google.guava:guava:29.0-jre'
+}
