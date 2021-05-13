@@ -1,0 +1,1 @@
+# hospital 기본주소 list
