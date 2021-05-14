@@ -52,9 +52,11 @@ public class HospitalUpdateHandler extends HttpServlet {
       hospital.setName(request.getParameter("name"));
       hospital.setTel(request.getParameter("tel"));
       hospital.setAddress(request.getParameter("address"));
-      hospital.setBusinessHour(request.getParameter("time"));
+      hospital.setStartTime(Integer.valueOf(request.getParameter("startTime")));
+      hospital.setEndTime(Integer.valueOf(request.getParameter("endTime")));
       hospital.setParking(Integer.valueOf(request.getParameter("parking")));
       hospital.setVeterinarian(Integer.valueOf(request.getParameter("vet")));
+      hospital.setPhoto(request.getParameter("photo"));
 
       SmallAddress smallAddress = new SmallAddress();
       smallAddress.setNo(Integer.parseInt(request.getParameter("cno")));
@@ -64,7 +66,7 @@ public class HospitalUpdateHandler extends HttpServlet {
 
       out.println("<p>병원을 변경했습니다.</p>");
 
-      response.setHeader("Refresh", "1;url=../main");
+      response.setHeader("Refresh", "1;url=list");
 
     } catch (Exception e) {
       StringWriter strWriter = new StringWriter();
