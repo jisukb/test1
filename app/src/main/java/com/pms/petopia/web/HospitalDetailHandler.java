@@ -3,13 +3,16 @@ package com.pms.petopia.web;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.pms.petopia.domain.Hospital;
+import com.pms.petopia.domain.Review;
 import com.pms.petopia.service.HospitalService;
+import com.pms.petopia.service.ReviewService;
 
 @SuppressWarnings("serial")
 @WebServlet("/hospital/detail")
@@ -20,6 +23,7 @@ public class HospitalDetailHandler extends HttpServlet {
       throws ServletException, IOException {
 
     HospitalService hospitalService = (HospitalService) request.getServletContext().getAttribute("hospitalService");
+    ReviewService reviewService = (ReviewService) request.getServletContext().getAttribute("reviewService");
 
     response.setContentType("text/html;charset=UTF-8");
     PrintWriter out = response.getWriter();
@@ -43,7 +47,7 @@ public class HospitalDetailHandler extends HttpServlet {
         return;
       }
 
-      out.println("<form action='update' method='post'>");
+      out.println("<form action='update' method='post' enctype='multipart/form-data'>");
       out.println("<table border='1'>");
       out.println("<tbody>");
       out.printf("<tr><th>번호</th> <td><input type='text' name='no' value='%d' readonly></td></tr>\n", hospital.getNo());
@@ -76,22 +80,33 @@ public class HospitalDetailHandler extends HttpServlet {
       }
 
       out.printf("<tr><th>수의사</th> <td><input type='number' name='vet' value='%d'></td></tr>\n", hospital.getVeterinarian());
-      //      out.printf("<tr><th>병원사진</th> <td><a href='%s'><img src='%s'></a><br>"
-      //          + "<input name='photo' type='file'></td></tr>\n", hospital.getPhoto());
+
+      out.printf("<tr><th>사진</th> <td><a href='%s'><img src='%s'></a><br>"
+          + "<input name='photo' type='file'></td></tr>\n",
+          hospital.getPhoto() != null ? "../upload/" + hospital.getPhoto() : "",
+              hospital.getPhoto() != null ? "../upload/" + hospital.getPhoto() + "_300x300.jpg" : "../images/person_300x300.jpg");
+
       out.println("</tbody>");
 
-      //Member loginUser = (Member) request.getSession().getAttribute("loginUser");
-      //if (loginUser != null && hospital.getNo() == loginUser.getNo()) {
       out.println("<tfoot>");
       out.println("<tr><td colspan='2'>");
       out.println("<input type='submit' value='변경'>");
       out.printf("<a href='delete?no=%d'>삭제</a>\n", hospital.getNo());
       out.println("</td></tr>");
       out.println("</tfoot>");
-      //}
 
       out.println("</table>");
       out.println("</form>");
+
+      List<Review> reviews = reviewService.list2();
+
+      out.printf("리뷰 개수 : %d\n", reviews.size());
+
+      for(Review r : reviews) {
+        if(hospital.getNo() == r.getHospital().getNo()) {
+          out.println(r.getComment());
+        }
+      }
 
     } catch (Exception e) {
       StringWriter strWriter = new StringWriter();
