@@ -41,7 +41,7 @@ public class HospitalDetailHandler extends HttpServlet {
 
       Hospital hospital = hospitalService.get(no);
       if (hospital == null) {
-        out.println("<p>해당 번호의 스토리가 없습니다.</p>");
+        out.println("<p>해당 번호의 병원이 없습니다.</p>");
         out.println("</body>");
         out.println("</html>");
         return;
